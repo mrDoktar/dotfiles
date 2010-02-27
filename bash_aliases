@@ -20,7 +20,8 @@ alias gp='git push'
 alias gd='git diff'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
-alias gb='git branch -v'
+alias gb='git branch -va'
+alias gr='git rm'
 
 function gco {
   if [ -z "$1" ]; then
@@ -30,7 +31,7 @@ function gco {
   fi
 }
 
-function st {
+function gs {
   if [ -d ".svn" ]; then
     svn status
   else
@@ -65,14 +66,20 @@ function mategem {
   mate $GEMDIR/`ls $GEMDIR | grep $1 | sort | tail -1`
 }
 
-alias qri='qri -w 98'
-alias fri='fri -w 98'
-
 #########
 # RAILS #
 #########
 alias sc='script/console'
 alias ss='script/server' # start up the beast; use "ss -d" to detach
+alias ssd='script/server --debugger'
+alias ssp='script/server RAILS_ENV=production'
+alias sg='script/generate'
+alias migrate='rake db:migrate db:test:clone'
+alias rst='touch tmp/restart.txt'
+alias asc='export AUTOFEATURE=true; autospec'
+alias as='export AUTOFEATURE=false; autospec'
+
+function s { cd ~/Sites/$1; }
 
 # stop daemonized Rails server
 function sst() {
@@ -99,14 +106,15 @@ function sr() {
   fi
 }
 
-# see http://railstips.org/2007/5/31/even-edgier-than-edge-rails
-function edgie() { 
-  ruby ~/.coral/rails/rails/railties/bin/rails $1 && cd $1 && ln -s ~/.coral/rails/rails vendor/rails
-}
-
 ########
 # misc #
 ########
+
+# cd
+alias ..='cd ..'
+
+# commands starting with % for pasting from web
+alias %=' '
 
 alias texclean='rm -f *.toc *.aux *.log *.cp *.fn *.tp *.vr *.pg *.ky'
 alias clean='echo -n "Really clean this directory?";
@@ -122,8 +130,7 @@ alias j="jobs -l"
 alias l="ls -lah"
 alias ll="ls -l"
 alias la='ls -A'
-# alias pu="pushd"
-# alias po="popd"
+alias reload='. ~/.bash_profile'
 
 # mojombo http://gist.github.com/180587
 function psg {
@@ -139,5 +146,3 @@ function setenv () {
 }
 
 ########
-
-alias flashlog='tail -f ~/Library/Preferences/Macromedia/Flash\ Player/Logs/flashlog.txt'

@@ -2,6 +2,9 @@
 require 'irb/completion'
 # IRB.conf[:AUTO_INDENT] = true
 IRB.conf[:PROMPT_MODE] = :SIMPLE
+IRB.conf[:SAVE_HISTORY] = 1000
+IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
+
 require 'pp'
 
 load File.dirname(__FILE__) + '/.railsrc' if $0 == 'irb' && ENV['RAILS_ENV']
@@ -15,6 +18,14 @@ end
 def copy(data)
   File.popen('pbcopy', 'w') { |p| p << data.to_s }
   $?.success?
+end
+
+def copy_history
+  history = Readline::HISTORY.entries
+  index = history.rindex("exit") || history.rindex("quit") || -1
+  content = history[(index+1)..-2].join("\n")
+  puts content
+  copy content
 end
 
 if defined? Benchmark

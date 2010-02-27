@@ -8,30 +8,16 @@
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoredups
 
-export EDITOR=mate
-
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
+export EDITOR='mate -w'
 
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\h\[\033[00m\]:\[\e[0;31m\]\w\[\e[m\]$(parse_git_branch) $ '
+PS1='\[\e[0;31m\]\w\[\e[m\]$(__git_ps1 " (%s)") $ '
 
 # Terminal title (git completion is required for this):
-# export PROMPT_COMMAND='echo -ne "\033]0;${PWD/#$HOME/~} $(__git_ps1 " (%s)")"; echo -ne "\007"' 
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"'
-    ;;
-*)
-    ;;
-esac
+export PROMPT_COMMAND='echo -ne "\033]0;${PWD/#$HOME/~} $(__git_ps1 " (%s)")"; echo -ne "\007"' 
 
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then
@@ -41,16 +27,10 @@ fi
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+if [ -f ~/.bash_completions ]; then
+    . ~/.bash_completions
 fi
 
 if [ -f ~/bin/sake-completion ]; then
   complete -C ~/bin/sake-completion -o default sake
-fi
-
-git_completion='/usr/local/git/contrib/completion/git-completion.bash'
-
-if [ -f $git_completion ]; then
-  source $git_completion
 fi

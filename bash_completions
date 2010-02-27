@@ -1,0 +1,4 @@
+source ~/.completion_scripts/git_completion
+complete -C ~/.completion_scripts/rake_completion -o default rake
+complete -C ~/.completion_scripts/project_completion -o default s
+complete -C ~/.completion_scripts/capistrano_completion -o default cap
